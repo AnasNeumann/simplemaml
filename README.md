@@ -6,7 +6,7 @@ A generic Python/Tensorflow function that implements a simple version of the "Mo
 * Original repository with a more complete version of the code: https://github.com/cbfinn/maml
 
 ## Original algorithm adapted for regression
-![original-algorithm](/documentation/MAML.png)
+![original-algorithm](/MAML.png)
 
 ## Tools needed
 * tensorflow>=2.13.0: https://www.tensorflow.org/
