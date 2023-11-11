@@ -1,3 +1,3 @@
 # simplemaml/__init__.py
-__all__ = ['maml']
-from .maml import MAML
+__all__ = ['simplemaml']
+from .simplemaml import MAML

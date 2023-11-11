@@ -11,7 +11,7 @@ A generic Python/Tensorflow function that implements a simple version of the "Mo
 ## Usage
 1. Install with `pip install simplemaml`
 2. In your python code:
-    - `import simplemaml.MAML as MAML`
+    - `from simplemaml import MAML`
     - `MAML(model=your_model, tasks=your_array_of_tasks, etc.)`
 
 ## Tools needed
