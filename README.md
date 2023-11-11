@@ -5,6 +5,10 @@ A generic Python/Tensorflow function that implements a simple version of the "Mo
 * Chelsea Finn explains well her algorithm in this Standford lecture: https://www.youtube.com/watch?v=Gj5SEpFIv8I&list=PLoROMvodv4rNjRoawgt72BBNwL2V7doGI
 * Original repository with a more complete version of the code: https://github.com/cbfinn/maml
 
+## Tools needed
+* tensorflow>=2.13.0: https://www.tensorflow.org/
+* numpy>=1.24.3: https://numpy.org/
+
 ## Complete code
 ```python
 # MAML generic function
