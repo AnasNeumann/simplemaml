@@ -5,7 +5,7 @@ with open('requirements.txt') as f:
 
 setup(
     name='simplemaml',
-    version='1.0',
+    version='1.01',
     description='A generic Python function that implements a simple version of the "Model-Agnostic Meta-Learning (MAML) Algorithm for Fast Adaptation of Deep Networks" as designed by Chelsea Finn et al. 2017',
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
