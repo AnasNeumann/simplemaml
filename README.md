@@ -5,6 +5,26 @@ A generic Python/Tensorflow function that implements a simple version of the "Mo
 * Chelsea Finn explains well her algorithm in this Standford lecture: https://www.youtube.com/watch?v=Gj5SEpFIv8I&list=PLoROMvodv4rNjRoawgt72BBNwL2V7doGI
 * Original repository with a more complete version of the code: https://github.com/cbfinn/maml
 
+## Original algorithm
+```python
+# Algorithm 2 MAML for Few-Shot Supervised Learning
+Require: p(T): distribution over tasks
+Require: α, β: step size hyperparameters
+
+1: randomly initialize θ
+2: while not done do
+3:     Sample batch of tasks Ti ~ p(T)
+4:     for all Ti do
+5:         Sample K datapoints D = {x^(j), y^(j)} from Ti
+6:         Evaluate ∇θL_Ti(fθ) using D and L_Ti in Equation (2) or (3)
+7:         Compute adapted parameters with gradient descent:
+            θ'_i = θ - α∇θL_Ti(fθ)
+8:         Sample datapoints D'_i = {x^(j), y^(j)} from Ti for the meta-update
+9:     end for
+10:     Update θ ← θ - β∇θ Σ_Ti∼p(T) L_Ti(fθ'_i) using each D'_i and L_Ti in Equation 2 or 3
+11: end while
+```
+
 ## Tools needed
 * tensorflow>=2.13.0: https://www.tensorflow.org/
 * numpy>=1.24.3: https://numpy.org/
