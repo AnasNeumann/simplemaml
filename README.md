@@ -1,4 +1,4 @@
-# MAML
+# SIMPLE MAML
 A generic Python/Tensorflow function that implements a simple version of the "Model-Agnostic Meta-Learning (MAML) Algorithm for Fast Adaptation of Deep Networks" as designed by Chelsea Finn et al. 2017 [1]. Especially, this implementation focuses on regression and prediction problems. 
 
 ## Original algorithm adapted for regression
