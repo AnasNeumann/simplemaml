@@ -9,7 +9,7 @@ A generic Python/Tensorflow function that implements a simple version of the "Mo
 ![original-algorithm](/MAML.png)
 
 ## Usage
-1. Install with `pip install simplemaml==1.0`
+1. Install with `pip install simplemaml`
 2. In your python code:
     - `import simplemaml.MAML as MAML`
     - `MAML(model=your_model, tasks=your_array_of_tasks, etc.)`
