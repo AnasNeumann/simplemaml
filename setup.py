@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 with open('requirements.txt') as f:
     required = f.read().splitlines()
@@ -15,7 +15,6 @@ setup(
     author='Anas Neumann',
     author_email='anas.neumann.1@ulaval.ca',
     url='https://github.com/AnasNeumann/simplemaml',
-    packages=find_packages(),
     py_modules=['maml'],
     install_requires=required,
     classifiers=[
