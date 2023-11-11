@@ -8,6 +8,12 @@ A generic Python/Tensorflow function that implements a simple version of the "Mo
 ## Original algorithm adapted for regression
 ![original-algorithm](/MAML.png)
 
+## Usage
+1. Install with `pip install simplemaml==1.0`
+2. In your python code:
+    - `import simplemaml.maml as maml`
+    - `maml(model=your_model, tasks=your_array_of_tasks, etc.)`
+
 ## Tools needed
 * tensorflow>=2.13.0: https://www.tensorflow.org/
 * numpy>=1.24.3: https://numpy.org/
