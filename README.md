@@ -18,7 +18,7 @@ A generic Python/Tensorflow function that implements a simple version of the "Mo
 * tensorflow>=2.13.0: https://www.tensorflow.org/
 * numpy>=1.24.3: https://numpy.org/
 
-## More about the algorithm
+## Refer to this Repository in scientific document
 ```bibtex
     @misc{simplemaml,
       author = {Anas Neumann},
