@@ -1,10 +1,6 @@
 # MAML
 A generic Python/Tensorflow function that implements a simple version of the "Model-Agnostic Meta-Learning (MAML) Algorithm for Fast Adaptation of Deep Networks" as designed by Chelsea Finn et al. 2017 [1]. Especially, this implementation focuses on regression and prediction problems. 
 
-## More about the algorithm
-* Chelsea Finn explains well her algorithm in this Standford lecture: https://www.youtube.com/watch?v=Gj5SEpFIv8I&list=PLoROMvodv4rNjRoawgt72BBNwL2V7doGI
-* Original repository with a more complete version of the code: https://github.com/cbfinn/maml
-
 ## Original algorithm adapted for regression
 ![original-algorithm](/MAML.png)
 
@@ -13,10 +9,27 @@ A generic Python/Tensorflow function that implements a simple version of the "Mo
 2. In your python code:
     - `from simplemaml import MAML`
     - `MAML(model=your_model, tasks=your_array_of_tasks, etc.)`
+  
+## More about the algorithm
+* Chelsea Finn explains well her algorithm in this Standford lecture: https://www.youtube.com/watch?v=Gj5SEpFIv8I&list=PLoROMvodv4rNjRoawgt72BBNwL2V7doGI
+* Original repository with a more complete version of the code: https://github.com/cbfinn/maml
 
 ## Tools needed
 * tensorflow>=2.13.0: https://www.tensorflow.org/
 * numpy>=1.24.3: https://numpy.org/
+
+## More about the algorithm
+```bibtex
+    @misc{simplemaml,
+      author = {Anas Neumann},
+      title = {Simple MAML},
+      year = {2023},
+      publisher = {GitHub},
+      journal = {GitHub repository},
+      howpublished = {\url{https://github.com/AnasNeumann/simplemaml}},
+      commit = {main}
+    }
+```
 
 ## Complete code
 ```python
