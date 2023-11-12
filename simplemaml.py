@@ -3,7 +3,7 @@ import tensorflow.keras as keras
 import numpy as np
 import random
 
-def MAML(model, alpha=0.005, beta=0.005, optimizer=keras.optimizers.Adam, c_loss=keras.losses.mse, f_loss=keras.losses.MeanSquaredError(), meta_epochs=100, meta_tasks_per_epoch=[10, 30], train_split=0.2, tasks=[], callbacks=[keras.callbacks.EarlyStopping(patience=5)], cumul=False):
+def MAML(model, alpha=0.005, beta=0.005, optimizer=keras.optimizers.Adam, c_loss=keras.losses.mse, f_loss=keras.losses.MeanSquaredError(), meta_epochs=100, meta_tasks_per_epoch=[10, 30], train_split=0.2, tasks=[], cumul=False):
     """
     Simple MAML algorithm implementation for supervised regression.
         :param model: A Keras model to be trained using MAML.
@@ -15,17 +15,16 @@ def MAML(model, alpha=0.005, beta=0.005, optimizer=keras.optimizers.Adam, c_loss
         :param meta_tasks_per_epoch: Range of tasks to sample per epoch.
         :param train_split: Ratio of data to use for training in each task.
         :param tasks: List of tasks for meta-training.
-        :param callbacks: allow the user to add custom callback functions.
         :param cumul: choose between sum and mean gradients during the outer loop.
         :return: Tuple of trained model and evolution of losses over epochs.
     """
     if tf.config.list_physical_devices('GPU'):
         with tf.device('/GPU:0'):
-            return _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, meta_tasks_per_epoch, train_split, tasks, callbacks, cumul)
+            return _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, meta_tasks_per_epoch, train_split, tasks, cumul)
     else:
-       return _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, meta_tasks_per_epoch, train_split, tasks, callbacks, cumul)
+       return _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, meta_tasks_per_epoch, train_split, tasks, cumul)
 
-def _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, meta_tasks_per_epoch, train_split, tasks, callbacks, cumul):
+def _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, meta_tasks_per_epoch, train_split, tasks, cumul):
     log_step = meta_epochs // 10 if meta_epochs > 10 else 1
     optim_test=optimizer(learning_rate=alpha)
     optim_test.build(model.trainable_variables)
@@ -72,7 +71,4 @@ def _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, me
         losses.append(loss_evol)
         if step % log_step == 0:
             print(f'Meta epoch: {step}/{meta_epochs},  Loss: {loss_evol}')
-        if callbacks:
-            for callback in callbacks:
-                callback.on_epoch_end(step, logs={'loss': test_loss.numpy(), 'val_loss': test_loss.numpy()})
     return model, losses
