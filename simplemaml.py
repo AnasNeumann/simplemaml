@@ -74,5 +74,5 @@ def _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, me
             print(f'Meta epoch: {step}/{meta_epochs},  Loss: {loss_evol}')
         if callbacks:
             for callback in callbacks:
-                callback.on_epoch_end(step, logs={'loss': test_loss.numpy()})
+                callback.on_epoch_end(step, logs={'loss': train_loss.numpy(), 'val_loss': test_loss.numpy()})
     return model, losses
