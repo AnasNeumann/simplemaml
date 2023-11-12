@@ -47,7 +47,6 @@ def MAML(model, alpha=0.005, beta=0.005, optimizer=keras.optimizers.Adam, c_loss
         :param meta_tasks_per_epoch: Range of tasks to sample per epoch.
         :param train_split: Ratio of data to use for training in each task.
         :param tasks: List of tasks for meta-training.
-        :param callbacks: allow the user to add custom callback functions.
         :param cumul: choose between sum and mean gradients during the outer loop.
         :return: Tuple of trained model and evolution of losses over epochs.
     """
