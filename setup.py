@@ -8,8 +8,8 @@ with open('README.md', 'r', encoding='utf-8') as fh:
 
 setup(
     name='simplemaml',
-    version='1.0.6',
-    description='A generic Python and Tensorflow function that implements a simple version of the "Model-Agnostic Meta-Learning (MAML) Algorithm for Fast Adaptation of Deep Networks" as designed by Chelsea Finn et al. 2017',
+    version='1.1.0',
+    description='A generic Python and TensorFlow function that implements a simple version of the "Model-Agnostic Meta-Learning (MAML) Algorithm for Fast Adaptation of Deep Networks" as designed by Chelsea Finn et al. 2017',
     long_description=long_description,
     long_description_content_type='text/markdown',
     author='Anas Neumann',
