@@ -45,7 +45,7 @@ def _build_task(t, validation_split, k_folds):
         train_target, test_target = t["inputs"][v_start:v_end], t["target"][v_start:v_end]
         return train_input, test_input, train_target, test_target
     else:
-        v = random.randint(validation_split[0], validation_split[1]) if isinstance(validation_split,list) else validation_split
+        v = random.uniform(validation_split[0], validation_split[1]) if isinstance(validation_split,list) else validation_split
         split_idx = int(len(t["inputs"]) * v) 
         train_input, test_input = t["inputs"][:split_idx], t["inputs"][split_idx:]
         train_target, test_target = t["target"][:split_idx], t["target"][split_idx:]
