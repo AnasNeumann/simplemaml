@@ -23,6 +23,21 @@ def MAML(model, alpha=0.005, beta=0.005, optimizer=keras.optimizers.Adam, c_loss
             return _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, meta_tasks_per_epoch, train_split, tasks, cumul)
     else:
        return _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, meta_tasks_per_epoch, train_split, tasks, cumul)
+    
+def _build_task(t, train_split=0.2):
+    """
+    Build task t by splitting train_input, test_input, train_target, test_target if it's not already done
+        :param t: a task to learn during the meta-pre-training stage
+        :param train_split: Optional ratio of data to use for training in each task.
+        :return: train_input, test_input, train_target, test_target
+    """
+    if "train" in t and "test" in t:
+        return t["train"]["inputs"], t["train"]["target"], t["test"]["inputs"], t["test"]["target"] 
+    else:
+        split_idx = int(len(t["inputs"]) * train_split)
+        train_input, test_input = t["inputs"][:split_idx], t["inputs"][split_idx:]
+        train_target, test_target = t["target"][:split_idx], t["target"][split_idx:]
+        return train_input, test_input, train_target, test_target
 
 def _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, meta_tasks_per_epoch, train_split, tasks, cumul):
     log_step = meta_epochs // 10 if meta_epochs > 10 else 1
@@ -42,9 +57,7 @@ def _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, me
         model_copy.compile(loss=f_loss, optimizer=optim_train)
         for _ in range(num_tasks_sampled):
             t = random.choice(tasks)
-            split_idx = int(len(t["inputs"]) * train_split)
-            train_input, test_input = t["inputs"][:split_idx], t["inputs"][split_idx:]
-            train_target, test_target = t["target"][:split_idx], t["target"][split_idx:]
+            train_input, test_input, train_target, test_target = _build_task(t, train_split)
             
             # 1. Inner loop: Update the model copy on the current task
             with tf.GradientTape(watch_accessed_variables=False) as train_tape:

@@ -1,5 +1,5 @@
 # SIMPLE MAML
-A generic Python/Tensorflow function that implements a simple version of the "Model-Agnostic Meta-Learning (MAML) Algorithm for Fast Adaptation of Deep Networks" as designed by Chelsea Finn et al. 2017 [1]. Especially, this implementation focuses on regression and prediction problems. 
+A generic Python and TensorFlow function that implements a simple version of the "Model-Agnostic Meta-Learning (MAML) Algorithm for Fast Adaptation of Deep Networks" as designed by Chelsea Finn et al. 2017 [1]. Especially, this implementation focuses on regression and prediction problems. 
 
 ## Original algorithm adapted for regression
 ![original-algorithm](/MAML.png)
@@ -8,7 +8,7 @@ A generic Python/Tensorflow function that implements a simple version of the "Mo
 1. Install with `pip install simplemaml`
 2. In your python code:
     - `from simplemaml import MAML`
-    - `MAML(model=your_model, tasks=your_array_of_tasks, callbacks=your_array_of_callbacks, etc.)`
+    - `MAML(model=your_model, tasks=your_array_of_tasks, etc.)`
   
 ## More about the algorithm
 * Chelsea Finn explains well her algorithm in this Standford lecture: https://www.youtube.com/watch?v=Gj5SEpFIv8I&list=PLoROMvodv4rNjRoawgt72BBNwL2V7doGI
@@ -19,12 +19,12 @@ A generic Python/Tensorflow function that implements a simple version of the "Mo
 * numpy>=1.24.3: https://numpy.org/
 
 ## Refer to this Repository in scientific document
-Neumann, Anas. Simple Python/TensorFlow implementation of the optimization-based Model-Agnostic Meta-Learning (MAML) algorithm for supervised regression problems. *GitHub repository: https://github.com/AnasNeumann/simplemaml*, 2023.
+Neumann, Anas. Simple Python and TensorFlow implementation of the optimization-based Model-Agnostic Meta-Learning (MAML) algorithm for supervised regression problems. *GitHub repository: https://github.com/AnasNeumann/simplemaml*, 2023.
 
 ```bibtex
     @misc{simplemaml,
       author = {Anas Neumann},
-      title = {Simple Python/TensorFlow implementation of the optimization-based Model-Agnostic Meta-Learning (MAML) algorithm for supervised regression problems},
+      title = {Simple Python and TensorFlow implementation of the optimization-based Model-Agnostic Meta-Learning (MAML) algorithm for supervised regression problems},
       year = {2023},
       publisher = {GitHub},
       journal = {GitHub repository},
@@ -55,6 +55,21 @@ def MAML(model, alpha=0.005, beta=0.005, optimizer=keras.optimizers.Adam, c_loss
             return _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, meta_tasks_per_epoch, train_split, tasks, cumul)
     else:
        return _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, meta_tasks_per_epoch, train_split, tasks, cumul)
+    
+def _build_task(t, train_split=0.2):
+    """
+    Build task t by splitting train_input, test_input, train_target, test_target if it's not already done
+        :param t: a task to learn during the meta-pre-training stage
+        :param train_split: Optional ratio of data to use for training in each task.
+        :return: train_input, test_input, train_target, test_target
+    """
+    if "train" in t and "test" in t:
+        return t["train"]["inputs"], t["train"]["target"], t["test"]["inputs"], t["test"]["target"] 
+    else:
+        split_idx = int(len(t["inputs"]) * train_split)
+        train_input, test_input = t["inputs"][:split_idx], t["inputs"][split_idx:]
+        train_target, test_target = t["target"][:split_idx], t["target"][split_idx:]
+        return train_input, test_input, train_target, test_target
 
 def _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, meta_tasks_per_epoch, train_split, tasks, cumul):
     log_step = meta_epochs // 10 if meta_epochs > 10 else 1
@@ -74,9 +89,7 @@ def _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, me
         model_copy.compile(loss=f_loss, optimizer=optim_train)
         for _ in range(num_tasks_sampled):
             t = random.choice(tasks)
-            split_idx = int(len(t["inputs"]) * train_split)
-            train_input, test_input = t["inputs"][:split_idx], t["inputs"][split_idx:]
-            train_target, test_target = t["target"][:split_idx], t["target"][split_idx:]
+            train_input, test_input, train_target, test_target = _build_task(t, train_split)
             
             # 1. Inner loop: Update the model copy on the current task
             with tf.GradientTape(watch_accessed_variables=False) as train_tape:
