@@ -9,7 +9,10 @@ A generic Python and TensorFlow function that implements a simple version of the
 2. In your python code:
     - `from simplemaml import MAML`
     - `MAML(model=your_model, tasks=your_array_of_tasks, etc.)`
-  
+3. Your task should be in one of the two follwing formats:
+    - `tasks=[{"inputs": [], "target": []}, etc.]`
+    - `tasks=[{"train": {"inputs": [], "target": []}, "test": {"inputs": [], "target": []}}, etc.]`
+
 ## More about the algorithm
 * Chelsea Finn explains well her algorithm in this Standford lecture: https://www.youtube.com/watch?v=Gj5SEpFIv8I&list=PLoROMvodv4rNjRoawgt72BBNwL2V7doGI
 * Original repository with a more complete version of the code: https://github.com/cbfinn/maml
