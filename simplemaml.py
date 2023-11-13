@@ -3,7 +3,7 @@ import tensorflow.keras as keras
 import numpy as np
 import random
 
-def MAML(model, alpha=0.005, beta=0.005, optimizer=keras.optimizers.Adam, c_loss=keras.losses.mse, f_loss=keras.losses.MeanSquaredError(), meta_epochs=100, meta_tasks_per_epoch=[10, 30], train_split=0.2, tasks=[], cumul=False):
+def MAML(model, alpha=0.005, beta=0.005, optimizer=keras.optimizers.Adam, c_loss=keras.losses.mse, f_loss=keras.losses.MeanSquaredError(), meta_epochs=100, meta_tasks_per_epoch=[10, 30], train_split=0.2, k_folds=0, tasks=[], cumul=False):
     """
     Simple MAML algorithm implementation for supervised regression.
         :param model: A Keras model to be trained using MAML.
@@ -14,32 +14,42 @@ def MAML(model, alpha=0.005, beta=0.005, optimizer=keras.optimizers.Adam, c_loss
         :param meta_epochs: Number of meta-training epochs.
         :param meta_tasks_per_epoch: Range of tasks to sample per epoch.
         :param train_split: Ratio of data to use for training in each task.
+        :param k_folds: cross-validation with k_folds each time a task is called for meta-learning.
         :param tasks: List of tasks for meta-training.
         :param cumul: choose between sum and mean gradients during the outer loop.
         :return: Tuple of trained model and evolution of losses over epochs.
     """
     if tf.config.list_physical_devices('GPU'):
         with tf.device('/GPU:0'):
-            return _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, meta_tasks_per_epoch, train_split, tasks, cumul)
+            return _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, meta_tasks_per_epoch, train_split, k_folds, tasks, cumul)
     else:
-       return _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, meta_tasks_per_epoch, train_split, tasks, cumul)
+       return _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, meta_tasks_per_epoch, train_split, k_folds, tasks, cumul)
     
-def _build_task(t, train_split=0.2):
+def _build_task(t, train_split=0.2, k_folds=0):
     """
     Build task t by splitting train_input, test_input, train_target, test_target if it's not already done
         :param t: a task to learn during the meta-pre-training stage
-        :param train_split: Optional ratio of data to use for training in each task.
+        :param train_split: optional ratio of data to use for training in each task.
+        :param k_folds: optional cross-validation with k_folds each time a task is called for meta-learning.
         :return: train_input, test_input, train_target, test_target
     """
     if "train" in t and "test" in t:
         return t["train"]["inputs"], t["train"]["target"], t["test"]["inputs"], t["test"]["target"] 
+    elif k_folds>0:
+        fold = random.randint(0, k_folds-1)
+        fold_size = (len(t["inputs"]) // k_folds)
+        v_start = fold * fold_size
+        v_end = (fold + 1) * fold_size if fold < k_folds - 1 else len(t["inputs"])
+        train_input, train_target = np.concatenate((t["inputs"][:v_start], t["inputs"][v_end:]), axis=0), np.concatenate((t["target"][:v_start], t["target"][v_end:]), axis=0)
+        train_target, test_target = t["inputs"][v_start:v_end], t["target"][v_start:v_end]
+        return train_input, test_input, train_target, test_target
     else:
         split_idx = int(len(t["inputs"]) * train_split)
         train_input, test_input = t["inputs"][:split_idx], t["inputs"][split_idx:]
         train_target, test_target = t["target"][:split_idx], t["target"][split_idx:]
         return train_input, test_input, train_target, test_target
 
-def _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, meta_tasks_per_epoch, train_split, tasks, cumul):
+def _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, meta_tasks_per_epoch, train_split, k_folds, tasks, cumul):
     log_step = meta_epochs // 10 if meta_epochs > 10 else 1
     optim_test=optimizer(learning_rate=alpha)
     optim_test.build(model.trainable_variables)
@@ -57,7 +67,7 @@ def _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, me
         model_copy.compile(loss=f_loss, optimizer=optim_train)
         for _ in range(num_tasks_sampled):
             t = random.choice(tasks)
-            train_input, test_input, train_target, test_target = _build_task(t, train_split)
+            train_input, test_input, train_target, test_target = _build_task(t, train_split, k_folds)
             
             # 1. Inner loop: Update the model copy on the current task
             with tf.GradientTape(watch_accessed_variables=False) as train_tape:
