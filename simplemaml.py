@@ -24,7 +24,7 @@ def MAML(model, alpha=0.005, beta=0.005, optimizer=keras.optimizers.Adam, c_loss
             return _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, meta_tasks_per_epoch, validation_split, k_folds, tasks, cumul)
     else:
        return _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, meta_tasks_per_epoch, validation_split, k_folds, tasks, cumul)
-    
+
 def _build_task(t, validation_split, k_folds):
     """
     Build task t by splitting train_input, test_input, train_target, test_target if it's not already done.
