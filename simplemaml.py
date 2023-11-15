@@ -95,5 +95,5 @@ def _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, me
         loss_evol = total_loss/(step+1)
         losses.append(loss_evol)
         if step % log_step == 0:
-            print(f'Meta epoch: {step}/{meta_epochs},  Loss: {loss_evol}')
+            print(f'Meta epoch: {step+1}/{meta_epochs},  Loss: {loss_evol}')
     return model, losses
