@@ -38,7 +38,7 @@ Neumann, Anas. (2023). Simple Python and TensorFlow implementation of the optimi
 
 ## Complete code
 ```python
-def MAML(model, alpha=0.005, beta=0.005, optimizer=keras.optimizers.Adam, c_loss=keras.losses.mse, f_loss=keras.losses.MeanSquaredError(), meta_epochs=100, meta_tasks_per_epoch=[10, 30], validation_split=0.2, k_folds=0, tasks=[], cumul=False):
+def MAML(model, alpha=0.005, beta=0.005, optimizer=keras.optimizers.SGD, c_loss=keras.losses.mse, f_loss=keras.losses.MeanSquaredError(), meta_epochs=100, meta_tasks_per_epoch=[10, 30], validation_split=0.2, k_folds=0, tasks=[], cumul=False):
     """
     Simple MAML algorithm implementation for supervised regression.
         :param model: A Keras model to be trained using MAML.
@@ -59,7 +59,7 @@ def MAML(model, alpha=0.005, beta=0.005, optimizer=keras.optimizers.Adam, c_loss
             return _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, meta_tasks_per_epoch, validation_split, k_folds, tasks, cumul)
     else:
        return _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, meta_tasks_per_epoch, validation_split, k_folds, tasks, cumul)
-    
+
 def _build_task(t, validation_split, k_folds):
     """
     Build task t by splitting train_input, test_input, train_target, test_target if it's not already done.
@@ -130,7 +130,7 @@ def _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, me
         loss_evol = total_loss/(step+1)
         losses.append(loss_evol)
         if step % log_step == 0:
-            print(f'Meta epoch: {step}/{meta_epochs},  Loss: {loss_evol}')
+            print(f'Meta epoch: {step+1}/{meta_epochs},  Loss: {loss_evol}')
     return model, losses
 ```
 

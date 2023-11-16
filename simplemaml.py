@@ -3,7 +3,7 @@ import tensorflow.keras as keras
 import numpy as np
 import random
 
-def MAML(model, alpha=0.005, beta=0.005, optimizer=keras.optimizers.Adam, c_loss=keras.losses.mse, f_loss=keras.losses.MeanSquaredError(), meta_epochs=100, meta_tasks_per_epoch=[10, 30], validation_split=0.2, k_folds=0, tasks=[], cumul=False):
+def MAML(model, alpha=0.005, beta=0.005, optimizer=keras.optimizers.SGD, c_loss=keras.losses.mse, f_loss=keras.losses.MeanSquaredError(), meta_epochs=100, meta_tasks_per_epoch=[10, 30], validation_split=0.2, k_folds=0, tasks=[], cumul=False):
     """
     Simple MAML algorithm implementation for supervised regression.
         :param model: A Keras model to be trained using MAML.
