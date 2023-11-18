@@ -77,7 +77,7 @@ def _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, me
         model_copy.compile(loss=f_loss, optimizer=optim_train)
         for _ in range(num_tasks_sampled):
             t = random.choice(tasks)
-            train_input, test_input, train_target, test_target = _build_task(t, input_dimenstion, validation_split, k_folds)
+            train_input, test_input, train_target, test_target = _build_task(t, inputs_dimension, validation_split, k_folds)
             
             # 1. Inner loop: Update the model copy on the current task
             with tf.GradientTape(watch_accessed_variables=False) as train_tape:
