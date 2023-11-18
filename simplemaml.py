@@ -35,7 +35,7 @@ def _build_task(t, validation_split, k_folds):
         :return: train_input, test_input, train_target, test_target
     """
     if "train" in t and "test" in t:
-        return t["train"]["inputs"], t["train"]["target"], t["test"]["inputs"], t["test"]["target"] 
+        return t["train"]["inputs"], t["test"]["inputs"], t["train"]["target"], t["test"]["target"] 
     elif k_folds>0:
         fold = random.randint(0, k_folds-1)
         fold_size = (len(t["inputs"]) // k_folds)
