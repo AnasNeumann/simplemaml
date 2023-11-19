@@ -111,6 +111,7 @@ def _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, me
         optim_train.build(model_copy.trainable_variables)
         model_copy.compile(loss=f_loss, optimizer=optim_train)
         for _ in range(num_tasks_sampled):
+            gc.collect()
             t = random.choice(tasks)
             train_input, test_input, train_target, test_target = _build_task(t, inputs_dimension, validation_split, k_folds)
             
@@ -130,7 +131,7 @@ def _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, me
             g = test_tape.gradient(test_loss, model_copy.trainable_variables)
             for i, gradient in enumerate(g):
                 sum_gradients[i] += gradient
-    
+
         # 3. Meta-update: apply the accumulated gradients to the original model
         cumul_gradients = [grad / (1.0 if cumul else num_tasks_sampled) for grad in sum_gradients]
         optim_test.apply_gradients(zip(cumul_gradients, model.trainable_variables))
@@ -139,6 +140,7 @@ def _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, me
         losses.append(loss_evol)
         if step % log_step == 0:
             print(f'Meta epoch: {step+1}/{meta_epochs},  Loss: {loss_evol}')
+        gc.collect()
     return model, losses
 ```
 
