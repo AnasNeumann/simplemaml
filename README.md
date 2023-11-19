@@ -111,7 +111,6 @@ def _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, me
         optim_train.build(model_copy.trainable_variables)
         model_copy.compile(loss=f_loss, optimizer=optim_train)
         for _ in range(num_tasks_sampled):
-            gc.collect()
             t = random.choice(tasks)
             train_input, test_input, train_target, test_target = _build_task(t, inputs_dimension, validation_split, k_folds)
             
@@ -140,7 +139,6 @@ def _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, me
         losses.append(loss_evol)
         if step % log_step == 0:
             print(f'Meta epoch: {step+1}/{meta_epochs},  Loss: {loss_evol}')
-        gc.collect()
     return model, losses
 ```
 
