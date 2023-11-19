@@ -21,7 +21,7 @@ A generic Python and TensorFlow function that implements a simple version of the
 * tensorflow>=2.13.0: https://www.tensorflow.org/
 * numpy>=1.24.3: https://numpy.org/
 
-## Refer to this Repository in scientific document
+## Refer to this repository in scientific documents
 Neumann, Anas. (2023). Simple Python and TensorFlow implementation of the optimization-based Model-Agnostic Meta-Learning (MAML) algorithm for supervised regression problems. *GitHub repository: https://github.com/AnasNeumann/simplemaml*.
 
 ```bibtex
