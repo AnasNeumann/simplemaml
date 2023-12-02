@@ -148,10 +148,10 @@ def _MAML_compute(model, alpha, beta, optimizer, c_loss, f_loss, meta_epochs, me
     return model, losses
 ```
 
-# Build a new version of the lib (*after updating the version number in setup.py*)
-`rm -rf dist/ build/ simplemaml.egg-info/`
-`python3 setup.py sdist bdist_wheel`
-`twine upload dist/*`
+## Build a new version of the lib (*after updating the version number in setup.py*)
+1. `rm -rf dist/ build/ simplemaml.egg-info/`
+2. `python3 setup.py sdist bdist_wheel`
+3. `twine upload dist/*`
 
 ## REFERENCES
 [1] Finn, C., Abbeel, P. &amp; Levine, S.. (2017). Model-Agnostic Meta-Learning for Fast Adaptation of Deep Networks. <i>Proceedings of the 34th International Conference on Machine Learning</i>, in <i>Proceedings of Machine Learning Research</i> 70:1126-1135 Available from https://proceedings.mlr.press/v70/finn17a.html and https://proceedings.mlr.press/v70/finn17a/finn17a.pdf.
