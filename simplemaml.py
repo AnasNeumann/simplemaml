@@ -54,7 +54,7 @@ def _k_fold_task(t, param):
     v_start = fold * fold_size
     v_end = (fold + 1) * fold_size if fold < k - 1 else len(t["inputs"])
     t_i = np.concatenate((t["inputs"][:v_start], t["inputs"][v_end:]), axis=0)
-    train_input = t_i if d<=1 else [t_i for d in range(d)]
+    train_input = t_i if d<=1 else [t_i for _ in range(d)]
     test_input = t["inputs"][v_start:v_end] if d<=1 else [t["inputs"][v_start:v_end] for _ in range(d)]
     train_target = np.concatenate((t["target"][:v_start], t["target"][v_end:]), axis=0)
     test_target = t["target"][v_start:v_end]
