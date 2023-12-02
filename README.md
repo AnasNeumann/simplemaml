@@ -13,6 +13,8 @@ A generic Python and TensorFlow function that implements a simple version of the
     - `tasks=[{"inputs": [], "target": []}, etc.]`
     - `tasks=[{"train": {"inputs": [], "target": []}, "test": {"inputs": [], "target": []}}, etc.]`
 
+*You can also download the lib as a .whl file using `pip download simplemaml --only-binary=:all: --no-deps`*
+
 ## More about the algorithm
 * Chelsea Finn explains well her algorithm in this Standford lecture: https://www.youtube.com/watch?v=Gj5SEpFIv8I&list=PLoROMvodv4rNjRoawgt72BBNwL2V7doGI
 * Original repository with a more complete version of the code: https://github.com/cbfinn/maml
